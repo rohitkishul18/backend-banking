@@ -1,6 +1,7 @@
 const { sendEmail } = require('../utils/email.service');
 const User = require('../models/user.model');
 const Otp = require('../models/otp.model');
+const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res) => {
   try {
@@ -60,7 +61,19 @@ exports.verifyOtp = async (req, res) => {
     // Delete OTP after verification
     await Otp.deleteOne({ email });
 
-    return res.status(200).json({ success: true, message: 'OTP verified successfully' });
+    //generate the token
+    const token = jwt.sign({userId : user._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
+
+  return res.status(200).json({
+  success: true,
+  message: 'OTP verified successfully',
+  token,
+  user: {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+  },
+});
   } catch (error) {
     console.error('Verify OTP Error:', error);
     return res.status(500).json({ message: 'Server error: ' + error.message });
