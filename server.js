@@ -5,7 +5,8 @@ require('dotenv').config();
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth.route');
 const dashboardRoutes = require('./routes/dashboard.routes');
-const bankUserRoutes = require('./routes/bankUser.route');  
+const bankUserRoutes = require('./routes/bankUser.route'); 
+const accountRoutes = require('./routes/account.route');   
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/bankUser', bankUserRoutes);
+app.use('/api/account', accountRoutes);
+
 
 // Connect DB
 connectDB();
